@@ -1,0 +1,39 @@
+
+
+replicaCount: 1
+
+
+name: elk
+
+
+image:
+  repository: docker.elastic.co/elasticsearch/elasticsearch
+  pullPolicy: IfNotPresent
+ 
+  tag: 7.13.0
+
+nodeSelector:
+  nameNode: kuber-worker3
+
+environments:
+  nameDiscoveryType: discovery.type
+  valueDiscoveryType: "single-node"
+
+
+container:
+  restartPolicy: "Never"
+
+resources:
+
+  limits:
+    cpu: 100m
+    memory: 2048Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# services:
+#   podSelector:
+#     pod: elk
+#   deploymentSelector:
+    
