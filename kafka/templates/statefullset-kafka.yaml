@@ -7,24 +7,24 @@ spec:
   replicas: {{ .Values.statefull.replicaCount }}
   selector:
     matchLabels:
-      statefulset: {{ .Values.name }}
+      statefulset: {{ .Values.kafka.statefull.matchLabels }}
   template:
     metadata:
       labels:
-        statefulset: {{ .Values.name }}
+        statefulset: {{ .Values.kafka.statefull.matchLabels }}
     spec:
-      restartPolicy: {{ .Values.container.restartPolicy }}
+      restartPolicy: {{ .Values.kafka.statefull.restartPolicy }}
       containers:
-      - name: {{ .Values.name }}
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+      - name: {{ .Values.kafka.statefull.container.anme }}
+        image: {{ .Values.Values.kafka.statefull.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.kafka.statefull.image.pullPolicy }}
         resources:
-            limits:
-              cpu: {{ .Values.resources.requests.cpu }}
-              memory: {{ .Values.resources.requests.memory }}
             requests:
-              cpu: {{ .Values.resources.limits.cpu }}
-              memory: {{ .Values.resources.limits.memory }}
+              cpu: {{ .Values.kafka.statefull.requests.cpu }}
+              memory: {{ .Values.kafka.statefull.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.kafka.statefull.resources.limits.cpu }}
+              memory: {{ .Values.kafka.statefull.resources.limits.memory }}
 
 
 
