@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ .Values.kafka.statefull.name }}
+  lable:
+    stateset: {{ .Values.kafka.statefull.name }}
 spec:
   serviceName: {{ .Values.service.name }}
   replicas: {{ .Values.statefull.replicaCount }}
@@ -25,21 +27,16 @@ spec:
             limits:
               cpu: {{ .Values.kafka.statefull.resources.limits.cpu }}
               memory: {{ .Values.kafka.statefull.resources.limits.memory }}
+        envFrom:
+        - configMapRef:
+            name: {{ .Values.kafka.configmap.name }}
 
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data
+          name: {{ .Values.name }}-gluster-volume
 
-
-
-    spec:
-          envFrom:
-          - configMapRef:
-              name: {{ .Values.name }}-config-env
-
-          volumeMounts:
-          - mountPath: /usr/share/elasticsearch/data
-            name: {{ .Values.name }}-gluster-volume
-
-        nodeSelector:
-            name-node: {{ .Values.nodeSelector.nameNode }}
+      nodeSelector:
+            name-node: {{ .Values.nodeSelector.nameNode1 }}
 
         volumes:
         - name: {{ .Values.name }}-gluster-volume
