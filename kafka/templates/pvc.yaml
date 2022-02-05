@@ -8,7 +8,7 @@ spec:
   storageClassName: slow
   resources:
     requests:
-        storage: 20Gi
+      storage: 20Gi
   accessModes:
     - ReadWriteOnce
     - ReadOnlyMany

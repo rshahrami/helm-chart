@@ -3,14 +3,14 @@ kind: Service
 metadata:
   name: {{ .Values.name }}-service
   labels:
-    service: {{ .Values.name }}
+    app: {{ .Values.name }}
 spec:
-  type: NodePort
   ports:
-  - port: 9200
-    targetPort: 9200
-    nodePort: 31000
-    protocol: TCP
-    name: nodeportelastic
+  - port: 80
+    name: web
+  ports:
+  - port: 80
+    name: web
+  clusterIP: None
   selector:
-    deploy: {{ .Values.name }} 
+    app: {{ .Values.name }}

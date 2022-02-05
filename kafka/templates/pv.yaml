@@ -18,3 +18,4 @@ spec:
     endpoints: gluster-endpoint
     path: kafka 
     readOnly: no
+    
