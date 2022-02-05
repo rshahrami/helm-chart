@@ -1,45 +1,47 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: es-cluster
+  name: {{ .Values.zookeeper.statefull.name }}
+  lable:
+    stateset: {{ .Values.zookeeper.statefull.name }}
 spec:
-  serviceName: {{ .Values.name }}
-  replicas: 4
+  serviceName: {{ .Values.service.name }}
+  replicas: {{ .Values.statefull.replicaCount }}
   selector:
     matchLabels:
-      statefulset: {{ .Values.name }}
+      statefulset: {{ .Values.zookeeper.statefull.matchLabels}}  # has to match .spec.template.metadata.labels
   template:
     metadata:
       labels:
-        statefulset: {{ .Values.name }}
+        statefulset: {{ .Values.zookeeper.statefull.matchLabels }}
     spec:
-      restartPolicy: {{ .Values.container.restartPolicy }}
+      restartPolicy: {{ .Values.zookeeper.statefull.restartPolicy }}
       containers:
-      - name: {{ .Values.name }}
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+      - name: {{ .Values.zookeeper.statefull.container.name }}
+        image: {{ .Values.Values.zookeeper.statefull.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.zookeeper.statefull.image.pullPolicy }}
         resources:
-            limits:
-              cpu: {{ .Values.resources.requests.cpu }}
-              memory: {{ .Values.resources.requests.memory }}
             requests:
-              cpu: {{ .Values.resources.limits.cpu }}
-              memory: {{ .Values.resources.limits.memory }}
+              cpu: {{ .Values.zookeeper.statefull.requests.cpu }}
+              memory: {{ .Values.zookeeper.statefull.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.zookeeper.statefull.resources.limits.cpu }}
+              memory: {{ .Values.zookeeper.statefull.resources.limits.memory }}
 
+        env:
+          - name:  ALLOW_ANONYMOUS_LOGIN=yes
+            value: yes
 
+        # envFrom:
+        # - configMapRef:
+        #     name: {{ .Values.zookeeper.configmap.name }}
 
+        volumeMounts:
+        - mountPath: /bitnami/zookeeper
+          name: {{ .Values.name }}-gluster-volume
 
-    spec:
-          envFrom:
-          - configMapRef:
-              name: {{ .Values.name }}-config-env
-
-          volumeMounts:
-          - mountPath: /usr/share/elasticsearch/data
-            name: {{ .Values.name }}-gluster-volume
-
-        nodeSelector:
-            name-node: {{ .Values.nodeSelector.nameNode }}
+      nodeSelector:
+            name-node: {{ .Values.nodeSelector.nameNode1 }}
 
         volumes:
         - name: {{ .Values.name }}-gluster-volume
@@ -47,3 +49,18 @@ spec:
             endpoints: {{ .Values.name }}-endpoint
             path: volume1 
             readOnly: no
+
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Values.name }}-gluster-volume
+      labels:
+        statefulset: {{ .Values.zookeeper.statefull.matchLabels }}
+    spec:
+      accessModes: 
+        - ReadWriteOnce
+        - ReadOnlyMany
+        - ReadWriteMany
+      storageClassName: slow
+      resources:
+        requests:
+          storage: 100Gi
