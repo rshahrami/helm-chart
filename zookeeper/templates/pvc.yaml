@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.name }}-pvc
+  labels:
+    pvc: {{ .Values.name }}
+spec:
+  storageClassName: slow
+  resources:
+    requests:
+      storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+    - ReadOnlyMany
+    - ReadWriteMany
