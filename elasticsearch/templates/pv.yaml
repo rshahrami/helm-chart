@@ -5,7 +5,7 @@ metadata:
   labels:
     pv: {{ .Values.name }}
 spec:
-  storageClassName: slow
+  storageClassName: elasticsearch
   capacity:
     storage: 20Gi
   accessModes:
@@ -16,5 +16,5 @@ spec:
   volumeMode: Filesystem
   glusterfs:
     endpoints: {{ .Values.name }}-endpoint
-    path: volume1 
+    path: elasticsearch
     readOnly: no
