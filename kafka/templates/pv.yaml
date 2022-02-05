@@ -15,6 +15,6 @@ spec:
   persistentVolumeReclaimPolicy: Recycle
   volumeMode: Filesystem
   glusterfs:
-    endpoints: {{ .Values.name }}-endpoint
-    path: volume1 
+    endpoints: gluster-endpoint
+    path: kafka 
     readOnly: no

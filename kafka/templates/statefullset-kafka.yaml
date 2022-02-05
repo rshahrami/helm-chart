@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ .Values.kafka.statefull.name }}
+  name: {{ .Values.name }}
   lable:
-    stateset: {{ .Values.kafka.statefull.name }}
+    stateset: {{ .Values.name }}
 spec:
   serviceName: {{ .Values.service.name }}
-  replicas: {{ .Values.statefull.replicaCount }}
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      statefulset: {{ .Values.kafka.statefull.matchLabels}}
+      statefulset: {{ .Values.matchLabels}}
   template:
     metadata:
       labels:
-        statefulset: {{ .Values.kafka.statefull.matchLabels }}  # has to match .spec.template.metadata.labels
+        statefulset: {{ .Values.matchLabels }}  # has to match .spec.template.metadata.labels
     spec:
-      restartPolicy: {{ .Values.kafka.statefull.restartPolicy }}
+      restartPolicy: {{ .Values.restartPolicy }}
       containers:
-      - name: {{ .Values.kafka.statefull.container.name }}
-        image: {{ .Values.Values.kafka.statefull.image.repository }}:{{ .Values.image.tag }}
-        imagePullPolicy: {{ .Values.kafka.statefull.image.pullPolicy }}
+      - name: {{ .Values.container.name }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         resources:
             requests:
-              cpu: {{ .Values.kafka.statefull.requests.cpu }}
-              memory: {{ .Values.kafka.statefull.resources.requests.memory }}
+              cpu: {{ .Values.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
             limits:
-              cpu: {{ .Values.kafka.statefull.resources.limits.cpu }}
-              memory: {{ .Values.kafka.statefull.resources.limits.memory }}
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
 
         env:
           - name: KAFKA_CFG_ZOOKEEPER_CONNECT
@@ -68,7 +68,7 @@ spec:
   - metadata:
       name: {{ .Values.name }}-gluster-volume
       labels:
-        statefulset: {{ .Values.kafka.statefull.matchLabels }}
+        statefulset: {{ .Values.kafka.matchLabels }}
     spec:
       accessModes: 
         - ReadWriteOnce
