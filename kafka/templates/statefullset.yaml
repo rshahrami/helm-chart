@@ -2,10 +2,10 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ .Values.name }}
-  lable:
+  labels:
     statefulset: {{ .Values.name }}
 spec:
-  serviceName: {{ .Values.service.name }}
+  serviceName: {{ .Values.name }}-service
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
@@ -21,46 +21,54 @@ spec:
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        # - containerPort: 9092
-        #   name: inside
-        # - containerPort: 9093
-        #   name: outside
+        - containerPort: 9092
+          name: inside
+        - containerPort: 9093
+          name: outside
         resources:
             requests:
-              cpu: {{ .Values.requests.requests.cpu }}
+              cpu: {{ .Values.resources.requests.cpu }}
               memory: {{ .Values.resources.requests.memory }}
             limits:
               cpu: {{ .Values.resources.limits.cpu }}
               memory: {{ .Values.resources.limits.memory }}
 
+        command:
+        - sh
+        - -c
+        - "exec kafka-server-start.sh /opt/bitnami/kafka/config/server.properties --override broker.id=${HOSTNAME##*-} \
+          --override zookeeper.connect=zookeeper-service.default.svc.cluster.local:2181"
+          # --override advertised.listeners=INSIDE://$HOSTNAME:9092,OUTSIDE://$HOSTNAME.kafka-service.default.svc.cluster.local:9093 \
+          # --override listener.security.protocol.map=INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT,PLAINTEXT:PLAINTEXT"
         env:
-          - name: KAFKA_CFG_ZOOKEEPER_CONNECT
-            value: zookeeper-0.zookeeper:2181
-          - name: KAFKA_CFG_BROKER_ID
-            value: ${HOSTNAME##*-}
-            # value: echo $HOSTNAME | rev | cut -d'-' -f1 | rev
+          # - name: KAFKA_CFG_BROKER_ID
+          #   # value: HOSTNAME_COMMAND
+            # value: $HOSTNAME | rev | cut -d'-' -f1 | rev
+            # value: hostname | awk -F'-' '{print $$2}'
           - name: ALLOW_PLAINTEXT_LISTENER
-            value: yes
+            value: "yes"
           - name: KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP
             value: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT,PLAINTEXT:PLAINTEXT
           - name: KAFKA_CFG_LISTENERS
             value: INSIDE://:9092,OUTSIDE://:9093
           - name: KAFKA_CFG_ADVERTISED_LISTENERS
-            value: INSIDE://:9092,OUTSIDE://$HOSTNAME:9093
+            value: INSIDE://:9092,OUTSIDE://$HOSTNAME.kafka-service.default.svc.cluster.local:9093
           - name: KAFKA_INTER_BROKER_LISTENER_NAME
             value: INSIDE
           - name: KAFKA_CFG_AUTO_LEADER_REBALANCE_ENABLE
-            value: true
+            value: "true"
+          # - name: KAFKA_CFG_ZOOKEEPER_CONNECT
+            # value: zookeeper-deploy.zookeeper-service.default.svc.cluster.local:2181
         # envFrom:
         # - configMapRef:
-        #     name: {{ .Values.kafka.configmap.name }}
+        #     name: {{ .Values.configmap.name }}
 
         volumeMounts:
         - mountPath: /bitnami/kafka
           name: {{ .Values.name }}-gluster-volume
 
-      nodeSelector:
-        name-node: {{ .Values.nodeSelector.nameNode1 }}
+      # nodeSelector:
+      #   name-node: {{ .Values.nodeSelector.nameNode1 }}
 
       # volumes:
       # - name: {{ .Values.name }}-gluster-volume
@@ -73,13 +81,13 @@ spec:
   - metadata:
       name: {{ .Values.name }}-gluster-volume
       labels:
-        statefulset: {{ .Values.kafka.matchLabels }}
+        statefulset: {{ .Values.matchLabels }}
     spec:
       accessModes: 
         - ReadWriteOnce
         - ReadOnlyMany
         - ReadWriteMany
-      storageClassName: slow
+      storageClassName: kafkastorage
       resources:
         requests:
           storage: 20Gi

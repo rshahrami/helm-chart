@@ -5,7 +5,7 @@ metadata:
   labels:
     pvc: {{ .Values.name }}
 spec:
-  storageClassName: slow
+  storageClassName: kafkastorage
   resources:
     requests:
       storage: 20Gi

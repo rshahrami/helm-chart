@@ -5,7 +5,7 @@ metadata:
   labels:
     pv: {{ .Values.name }}
 spec:
-  storageClassName: slow
+  storageClassName: {{ .Values.name }}
   capacity:
     storage: 20Gi
   accessModes:
@@ -16,6 +16,6 @@ spec:
   volumeMode: Filesystem
   glusterfs:
     endpoints: gluster-endpoint
-    path: zookeeper
+    path: zookeeper   # create zookeeper directory in gluster server 
     readOnly: no
     

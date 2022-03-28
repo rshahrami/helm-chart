@@ -5,7 +5,7 @@ metadata:
   labels:
     pv: {{ .Values.name }}
 spec:
-  storageClassName: slow
+  storageClassName: kafkastorage
   capacity:
     storage: 20Gi
   accessModes:
@@ -16,6 +16,6 @@ spec:
   volumeMode: Filesystem
   glusterfs:
     endpoints: gluster-endpoint
-    path: kafka 
+    path: kafka
     readOnly: no
     

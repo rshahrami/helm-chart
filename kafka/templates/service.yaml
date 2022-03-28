@@ -3,14 +3,14 @@ kind: Service
 metadata:
   name: {{ .Values.name }}-service
   labels:
-    app: {{ .Values.name }}
+    service: {{ .Values.name }}
 spec:
   ports:
-  - port: 80
+  - port: 9093
     name: web
   ports:
-  - port: 80
-    name: web
+  - port: 9092
+    name: connection
   clusterIP: None
   selector:
-    app: {{ .Values.name }}
+    service: {{ .Values.name }}

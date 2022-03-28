@@ -19,6 +19,23 @@ spec:
         - name: {{ .Values.name }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # command:
+          # - sh
+          # - -c
+          # - "start-zookeeper \
+          #   --client_port=2181 \
+          #   --election_port=3888 \
+          #   --server_port=2888 \
+          #   --tick_time=2000 \
+          #   --init_limit=10 \
+          #   --sync_limit=5 \
+          #   --heap=512M \
+          #   --max_client_cnxns=60 \
+          #   --snap_retain_count=3 \
+          #   --purge_interval=12 \
+          #   --max_session_timeout=40000 \
+          #   --min_session_timeout=4000 \
+          #   --log_level=INFO"          
           env:
           - name: ALLOW_ANONYMOUS_LOGIN
             value: "yes"
@@ -38,14 +55,22 @@ spec:
           #     name: {{ .Values.name }}-config-env
 
           volumeMounts:
-          - mountPath: /bitnami/zookeeper/
+          - mountPath: /bitnami/zookeeper
             name: {{ .Values.name }}-gluster-volume
 
         nodeSelector:
-            name-node: {{ .Values.nodeSelector.nameNode }}
+            nodeName: {{ .Values.nodeSelector.nameNode }}
 
         volumes:
         - name: {{ .Values.name }}-gluster-volume
           persistentVolumeClaim:
-            claimName: {{ .Values.name }}-pvc     
+            claimName: {{ .Values.name }}-pvc
+
+
+        # - name: {{ .Values.name }}-gluster-volume
+        #   hostPath:
+        #     # directory location on host
+        #     path: /zookeeper
+        #     # this field is optional
+        #     type: Directory
 

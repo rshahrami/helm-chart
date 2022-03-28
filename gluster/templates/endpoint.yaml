@@ -6,9 +6,10 @@ metadata:
     endpoint: {{ .Values.name }}
 subsets:
   - addresses:
-      - ip: 192.168.143.41
-        hostname: kuber-worker1
-      - ip: 192.168.143.42
-        hostname: kuber-worker2
+      - ip: 192.168.143.22
+        hostname: gluster-1
+      - ip: 192.168.143.35
+        hostname: gluster-2
     ports:
       - port: 1
+      
