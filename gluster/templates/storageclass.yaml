@@ -1,0 +1,15 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .Values.name }}-sclass
+  labels:
+    sclass: {{ .Values.name }}
+provisioner: kubernetes.io/glusterfs
+parameters:
+  resturl: http://127.0.0.1:32000
+  clusterid: eb75b05e8f9b36e3ee5a01604e6df02f
+  restauthenabled: !!str true
+  restuser: admin
+  secretNamespace: default
+  secretName: heketi-admin-secret
+  volumetype: replicate:2
