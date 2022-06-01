@@ -1,0 +1,27 @@
+###########################################  create volume  ###############################
+server(gluster-s1)
+gluster peer probe gluster-s2
+gluster peer status
+
+
+server(gluster-s1)
+gluster volume create heketi-db-volume replica 3 \
+        gluster-s1:/gluster/heketi gluster-s2:/gluster/heketi gluster-s3:/gluster/heketi
+
+gluster volume start heketi-db-volume
+
+
+##########################################  ssh for heketi  ##############################
+sudo ssh-keygen -f /etc/heketi/heketi_key -t rsa -N ''
+sudo chown heketi:heketi /etc/heketi/heketi_key*
+
+for i in gluster-s1 gluster-s2 gluster-s3; do
+  ssh-copy-id -i /etc/heketi/heketi_key.pub root@$i
+done
+
+# check heketi ssh
+ssh -i /etc/heketi/heketi_key root@gluster-s1
+
+
+kubectl exec gluster-deploy-786b7db489-62ng6 \
+    -- heketi-cli --user admin --secret secretpassword topology load --json /etc/heketi/topology.json
