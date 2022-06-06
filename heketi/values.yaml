@@ -1,5 +1,9 @@
 
-name: gluster
+name:
+  heketi: heketi
+  glusterfs: glusterfs-cluster
+
+name: heketi
 servicetype: NodePort
 replica: 1
 restartPolicy: "Always"

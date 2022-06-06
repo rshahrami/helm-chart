@@ -1,24 +1,7 @@
 
-name: gluster
-servicetype: NodePort
-replica: 1
-restartPolicy: "Always"
+name:
+  glusterfs: glusterfs
+  pvc: pvcTest
 
 secret:
-  ssh: heketi-ssh-key-file
   admin: heketi-admin-secret
-
-
-image: 
-  repository: heketi/heketi
-  tag: 10
-  pullPolicy: IfNotPresent
-
-
-resources:
-  limits:
-    cpu: 100m
-    memory: 2048Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi

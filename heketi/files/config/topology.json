@@ -33,6 +33,22 @@
             "devices": [
               "/dev/sda3"
             ]
+          },
+          {
+            "node": {
+              "hostnames": {
+                "manage": [
+                  "node003.gluster.local"
+                ],
+                "storage": [
+                  "192.168.143.44"
+                ]
+              },
+              "zone": 1
+            },
+            "devices": [
+              "/dev/sda3"
+            ]
           }
         ]
       }

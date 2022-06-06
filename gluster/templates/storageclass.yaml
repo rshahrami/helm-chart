@@ -1,9 +1,9 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: {{ .Values.name }}-sclass
+  name: {{ .Values.name.glusterfs }}
   labels:
-    sclass: {{ .Values.name }}
+    sclass: {{ .Values.name.glusterfs }}
 provisioner: kubernetes.io/glusterfs
 parameters:
   resturl: http://127.0.0.1:32000
@@ -11,5 +11,5 @@ parameters:
   restauthenabled: !!str true
   restuser: admin
   secretNamespace: default
-  secretName: heketi-admin-secret
-  volumetype: replicate:2
+  secretName: {{ .Values.secret.admin }}
+  volumetype: replicate:3

@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
-  name: {{ .Values.name }}-deploy
+  name: {{ .Values.name.heketi }}
   labels:
-    deploy: {{ .Values.name }}
+    deploy: {{ .Values.name.heketi }}
 spec:
   selector:
     matchLabels:
-      deploy: {{ .Values.name }}
+      deploy: {{ .Values.name.heketi }}
   replicas: {{ .Values.replica }}
   template:
     metadata:
       labels:
-        deploy: {{ .Values.name }}
+        deploy: {{ .Values.name.heketi }}
     spec:
       restartPolicy: {{ .Values.restartPolicy }}
       containers:
-      - name: {{ .Values.name }}
+      - name: {{ .Values.name.heketi }}
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
@@ -46,9 +46,9 @@ spec:
             secretName: {{ .Values.secret.ssh }}
         - name: config
           configMap:
-            name: {{ .Values.name }}-config
+            name: {{ .Values.name.heketi }}
         - name: data
           glusterfs:
-            endpoints: {{ .Values.name }}-endpoint
+            endpoints: {{ .Values.name.glusterfs }}
             path: heketi-db-volume
             readOnly: no
