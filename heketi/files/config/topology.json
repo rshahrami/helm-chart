@@ -47,12 +47,10 @@
               "zone": 1
             },
             "devices": [
-              "/dev/sda3"
+              "/dev/vda3"
             ]
           }
         ]
       }
     ]
-}
-
-  
+  }

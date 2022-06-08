@@ -37,9 +37,6 @@ spec:
           - name: data
             mountPath: /var/lib/heketi
 
-      nodeSelector: 
-        nodeName: kuber-worker3
-
       volumes:
         - name: ssh-key-file
           secret:

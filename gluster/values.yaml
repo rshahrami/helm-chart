@@ -1,7 +1,7 @@
 
 name:
   glusterfs: glusterfs
-  pvc: pvcTest
+  pvc: pvctest
 
 secret:
   admin: heketi-admin-secret
