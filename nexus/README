@@ -1,0 +1,3 @@
+# Create a namespace for nexus
+
+kubectl create namespace nexus

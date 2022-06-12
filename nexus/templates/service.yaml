@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}
+  # namespace: {{ .Values.namespace }}
+  annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path:   /
+      prometheus.io/port:   '8081'
+spec:
+  selector:
+    deploy: {{ .Values.name }}
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.container.port }}
+      targetPort: {{ .Values.container.port }}
+      nodePort: {{ .Values.service.nodeport }}
+ 

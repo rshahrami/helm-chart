@@ -1,0 +1,29 @@
+
+name: nexus
+namespace: nexus
+replicaCount: 1
+
+image:
+  repository: sonatype/nexus3
+  pullPolicy: IfNotPresent
+  tag: 3.39.0
+
+nodeSelector:
+  nameNode: kuber-worker3
+
+container:
+  restartPolicy: "Always"
+  port: 8081
+
+  
+service:
+  nodeport: 32323
+  type: NodePort
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 4Gi
+  requests:
+    cpu: 500m
+    memory: 2Gi
