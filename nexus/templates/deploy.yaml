@@ -24,7 +24,10 @@ spec:
               memory: {{ .Values.resources.requests.memory }}
               cpu: {{ .Values.resources.requests.cpu }}
           ports:
-            - containerPort: {{ .Values.container.port }}
+            - containerPort: {{ .Values.container.port1 }}
+              name: {{ .Values.container.port1name }}
+            - containerPort: {{ .Values.container.port1 }}
+              name: {{ .Values.container.port2name }}
           volumeMounts:
             - name: nexus-data
               mountPath: /nexus-data
@@ -36,6 +39,9 @@ spec:
       #   volumeMounts:
       #   - name: <your nexus pvc volume name>
       #     mountPath: /nexus-data
+
+
+
       # volumes:
       #   - name: nexus-data
       #     emptyDir: {}

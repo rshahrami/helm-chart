@@ -13,12 +13,29 @@ nodeSelector:
 
 container:
   restartPolicy: "Always"
-  port: 8081
 
-  
+  port1: 8081
+  port1name: ui
+
+  port2: 5000
+  port2name: connection
+
+
+
+
+
 service:
-  nodeport: 32323
+  nodeport1: 32001
+  nodeport1name: ui
+
+  nodeport2: 32002
+  nodeport2name: connection
+
   type: NodePort
+
+
+
+
 
 resources:
   limits:

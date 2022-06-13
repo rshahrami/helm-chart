@@ -12,7 +12,12 @@ spec:
     deploy: {{ .Values.name }}
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.container.port }}
-      targetPort: {{ .Values.container.port }}
-      nodePort: {{ .Values.service.nodeport }}
+    - name: {{ .Values.service.nodeport1name }}
+      port: {{ .Values.container.port1 }}
+      targetPort: {{ .Values.container.port1 }}
+      nodePort: {{ .Values.service.nodeport1 }}
+    - name: {{ .Values.service.nodeport2name }}
+      port: {{ .Values.container.port2 }}
+      targetPort: {{ .Values.container.port2 }}
+      nodePort: {{ .Values.service.nodeport2 }}
  

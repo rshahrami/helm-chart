@@ -1,3 +1,50 @@
-# Create a namespace for nexus
 
-kubectl create namespace nexus
+add flowing text to /etc/docker/daemon.json directory
+
+{ "insecure-registries":["nexus:32002"] }
+
+docker service restart
+
+active "docker bearer token realm" in realm security  tab in nexus repository
+
+docker login <nexus-hostname>:<repository-port>
+
+docker tag <imageId or imageName> <nexus-hostname>:<repository-port>/<image>:<tag>
+
+docker push <nexus-hostname>:<repository-port>/<image>:<tag>
+
+docker pull <nexus-hostname>:<repository-port>/<image>:<tag>
+
+
+echo -n "nexus-username:nexus-password" | base64
+
+Example:
+echo -n "admin:admin123" | base64
+YWRtaW46MTIzNCFAIyRxd2U=
+
+
+cat ~/.docker/config.json
+
+The result should look as below:
+
+{
+	"auths": {
+		"nexus:32002": {
+			"auth": "YWRtaW46MTIzNCFAIyRxd2U="
+		}
+	},
+	"HttpHeaders": {
+		"User-Agent": "Docker-Client/19.03.6 (linux)"
+	}
+}
+
+
+One is to copy the base-64 encoded value of key auth and run:
+
+cat ~/.docker/config.json | base64
+
+The result should look as below:
+
+ewoJImF1dGhzIjogewoJCSJuZXh1czozMjAwMiI6IHsKCQkJImF1dGgiOiAiWVdSdGFXNDZNVEl
+6TkNGQUl5UnhkMlU9IgoJCX0KCX0sCgkiSHR0cEhlYWRlcnMiOiB7CgkJIlVzZXItQWdlbnQiOi
+AiRG9ja2VyLUNsaWVudC8xOS4wMy42IChsaW51eCkiCgl9Cn0=
