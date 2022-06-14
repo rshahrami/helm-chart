@@ -5,7 +5,7 @@ metadata:
   labels:
     statefulset: {{ .Values.name }}
 spec:
-  serviceName: {{ .Values.name }}-service
+  serviceName: {{ .Values.name }}
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
@@ -37,7 +37,7 @@ spec:
         - sh
         - -c
         - "exec kafka-server-start.sh /opt/bitnami/kafka/config/server.properties --override broker.id=${HOSTNAME##*-} \
-          --override zookeeper.connect=zookeeper-service.default.svc.cluster.local:2181"
+          --override zookeeper.connect=zookeeper.default.svc.cluster.local:2181"
           # --override advertised.listeners=INSIDE://$HOSTNAME:9092,OUTSIDE://$HOSTNAME.kafka-service.default.svc.cluster.local:9093 \
           # --override listener.security.protocol.map=INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT,PLAINTEXT:PLAINTEXT"
         env:
@@ -52,30 +52,19 @@ spec:
           - name: KAFKA_CFG_LISTENERS
             value: INSIDE://:9092,OUTSIDE://:9093
           - name: KAFKA_CFG_ADVERTISED_LISTENERS
-            value: INSIDE://:9092,OUTSIDE://$HOSTNAME.kafka-service.default.svc.cluster.local:9093
+            value: INSIDE://:9092,OUTSIDE://$HOSTNAME.kafka.default.svc.cluster.local:9093
           - name: KAFKA_INTER_BROKER_LISTENER_NAME
             value: INSIDE
           - name: KAFKA_CFG_AUTO_LEADER_REBALANCE_ENABLE
             value: "true"
           # - name: KAFKA_CFG_ZOOKEEPER_CONNECT
-            # value: zookeeper-deploy.zookeeper-service.default.svc.cluster.local:2181
-        # envFrom:
-        # - configMapRef:
-        #     name: {{ .Values.configmap.name }}
+            # value: zookeeper.default.svc.cluster.local:2181
+
 
         volumeMounts:
         - mountPath: /bitnami/kafka
           name: {{ .Values.name }}-gluster-volume
 
-      # nodeSelector:
-      #   name-node: {{ .Values.nodeSelector.nameNode1 }}
-
-      # volumes:
-      # - name: {{ .Values.name }}-gluster-volume
-      #   glusterfs:
-      #     endpoints: {{ .Values.name }}-endpoint
-      #     path: volume1 
-      #     readOnly: no
 
   volumeClaimTemplates:
   - metadata:
@@ -87,7 +76,7 @@ spec:
         - ReadWriteOnce
         - ReadOnlyMany
         - ReadWriteMany
-      storageClassName: kafkastorage
+      storageClassName: glusterfs
       resources:
         requests:
-          storage: 20Gi
+          storage: 2Gi
