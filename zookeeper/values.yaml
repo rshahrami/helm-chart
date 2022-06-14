@@ -4,10 +4,9 @@ replicaCount: 1
 name: zookeeper
 
 image:
-  repository: bitnami/zookeeper
+  repository: nexus:32002/zookeeper
   pullPolicy: IfNotPresent
- 
-  tag: 3.7.0
+  tag: 3.7.1
 
 nodeSelector:
   nameNode: kuber-worker3

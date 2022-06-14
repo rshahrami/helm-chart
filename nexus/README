@@ -10,8 +10,13 @@ active "docker bearer token realm" in realm security  tab in nexus repository
 docker login <nexus-hostname>:<repository-port>
 
 docker tag <imageId or imageName> <nexus-hostname>:<repository-port>/<image>:<tag>
+Example:
+docker tag af340544ed62 nexus:32002/hello-world:mytag
+
 
 docker push <nexus-hostname>:<repository-port>/<image>:<tag>
+Example:
+docker tag nexus:32002/hello-world:mytag
 
 docker pull <nexus-hostname>:<repository-port>/<image>:<tag>
 
@@ -48,3 +53,11 @@ The result should look as below:
 ewoJImF1dGhzIjogewoJCSJuZXh1czozMjAwMiI6IHsKCQkJImF1dGgiOiAiWVdSdGFXNDZNVEl
 6TkNGQUl5UnhkMlU9IgoJCX0KCX0sCgkiSHR0cEhlYWRlcnMiOiB7CgkJIlVzZXItQWdlbnQiOi
 AiRG9ja2VyLUNsaWVudC8xOS4wMy42IChsaW51eCkiCgl9Cn0=
+
+
+
+
+help:
+https://github.com/travelaudience/kubernetes-nexus/blob/master/docs/usage/using-nexus-with-docker.md
+https://blog.sonatype.com/kubernetes-recipe-sonatype-nexus-3-as-a-private-docker-registry
+https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/

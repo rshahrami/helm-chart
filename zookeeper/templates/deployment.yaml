@@ -15,6 +15,9 @@ spec:
         deploy: {{ .Values.name }}
     spec:
         restartPolicy: {{ .Values.container.restartPolicy }}
+        # securityContext:
+        #   runAsUser: 1000
+        #   runAsGroup: 1000
         containers:
         - name: {{ .Values.name }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
@@ -58,8 +61,8 @@ spec:
           - mountPath: /bitnami/zookeeper
             name: {{ .Values.name }}
 
-        nodeSelector:
-            nodeName: {{ .Values.nodeSelector.nameNode }}
+        # nodeSelector:
+        #     nodeName: {{ .Values.nodeSelector.nameNode }}
 
         volumes:
         - name: {{ .Values.name }}
