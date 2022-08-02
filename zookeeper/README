@@ -4,3 +4,5 @@ gluster volume create zookeeper replica 3 gluster-1:/gluster/zookeeper gluster-2
 gluster volume start zookeeper
 
 chown -R 1001:1001 /gluster/zookeeper
+
+sudo chmod 0775 /gluster/zookeeper
