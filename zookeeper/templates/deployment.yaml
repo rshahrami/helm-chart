@@ -15,9 +15,13 @@ spec:
         deploy: {{ .Values.name }}
     spec:
         restartPolicy: {{ .Values.container.restartPolicy }}
-        # securityContext:
-        #   runAsUser: 1000
-        #   runAsGroup: 1000
+        initContainers:
+        - image: alpine:3.12
+          name: chmod
+          volumeMounts:
+          - mountPath: /bitnami/zookeeper
+            name: {{ .Values.name }}
+          command: [ sh, -c, "chown -R 1001:1001 /bitnami/zookeeper" ]
         containers:
         - name: {{ .Values.name }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
@@ -52,28 +56,9 @@ spec:
             limits:
               memory: {{ .Values.resources.limits.memory }}
               cpu: {{ .Values.resources.limits.cpu }}
-
-          # envFrom:
-          # - configMapRef:
-          #     name: {{ .Values.name }}-config-env
-
           volumeMounts:
           - mountPath: /bitnami/zookeeper
             name: {{ .Values.name }}
-
-        # nodeSelector:
-        #     nodeName: {{ .Values.nodeSelector.nameNode }}
-
         volumes:
         - name: {{ .Values.name }}
           persistentVolumeClaim:
-            claimName: {{ .Values.name }}
-
-
-        # - name: {{ .Values.name }}-gluster-volume
-        #   hostPath:
-        #     # directory location on host
-        #     path: /zookeeper
-        #     # this field is optional
-        #     type: Directory
-
